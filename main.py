@@ -21,7 +21,7 @@ import sys
 # Define path to tessaract.exe
 path_to_tesseract = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 # Define path to image
-path_to_image = 'images/20221127162659_1.jpg'
+path_to_image = 'images/20221124221038_1.jpg'
 template = ['images/templates/xp_small.jpg']
 path_to_template = 'images/templates/minerals/enor_pearl.jpg'
 threshold = .8
@@ -137,18 +137,29 @@ def get_credits_area(path, game):
     game.credits.primary_objective = text[2]
     game.credits.secondary_objective = text[4]
 
-    regex_survial = re.compile('[1234]x Survival Bonus')
+    regex_survial = re.compile('[01234]x Survival Bonus')
     game.credits.survial_bonus_quan = text[text.index(list(filter(regex_survial.match, text))[0])][0]
     game.credits.survival_bonus = text[text.index(list(filter(regex_survial.match, text))[0])+1]
 
     regex_gold_mined = re.compile('\d+ x Gold mined')
     game.credits.gold_mined_quan = text[text.index(list(filter(regex_gold_mined.match, text))[0])].replace(' x Gold mined','')
-    game.credits.gold_mined = text[text.index(list(filter(regex_survial.match, text))[0])+1]
+    game.credits.gold_mined = text[text.index(list(filter(regex_gold_mined.match, text))[0])+1]
 
     regex_tyrant = re.compile('\d+ x Tyrant Shard')
-    game.credits.tyrant_shard_quan = text[text.index(list(filter(regex_tyrant.match, text))[0])].replace(
-        ' x Tyrant Shard', '')
-    game.credits.tyrant_shard = text[text.index(list(filter(regex_tyrant.match, text))[0]) + 1]
+    try:
+        game.credits.tyrant_shard_quan = text[text.index(list(filter(regex_tyrant.match, text))[0])].replace(
+            ' x Tyrant Shard', '')
+        game.credits.tyrant_shard = text[text.index(list(filter(regex_tyrant.match, text))[0]) + 1]
+    except:
+        pass
+
+    regex_bittergem = re.compile('\d+ x Bittergem')
+    try:
+        game.credits.bittergem_quan = text[text.index(list(filter(regex_bittergem.match, text))[0])].replace(
+            ' x Tyrant Shard', '')
+        game.credits.bittergem = text[text.index(list(filter(regex_bittergem.match, text))[0]) + 1]
+    except:
+        pass
 
     if 'OMEN Modular Exterminator' in text:
         game.credits.omen = text[text.index('OMEN Modular Exterminator')+1]
@@ -156,7 +167,10 @@ def get_credits_area(path, game):
         game.credits.ebonite_mutation = text[text.index('Ebonite Mutation')+1]
     if 'Tritilyte Shard' in text:
         game.credits.ebonite_mutation = text[text.index('Tritilyte Shard')+1]
-    pass
+    if '1 x Data Cell' in text:
+        game.credits.data_cell = text[text.index('1 x Data Cell')+1]
+    if 'Kursite Infection' in text:
+        game.credits.kursite_infection = text[text.index('Kursite Infection')+1]
 
 
 if __name__ == '__main__':

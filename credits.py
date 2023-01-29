@@ -14,4 +14,5 @@ class Credits:
         self.kursite_infection = 0
         self.tyrant_shard_quan = 0
         self.tyrant_shard = 0
+        self.bittergem_quan = 0
         self.bittergem = 0
