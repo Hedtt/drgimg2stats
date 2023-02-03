@@ -16,6 +16,6 @@ class Game:
         self.length = None
         self.modifiers = None
         self.mission_time = None
-        self.credits = Credits
-        self.minerals = Minerals
-        self.xp = Experience
+        self.credits = Credits()
+        self.minerals = Minerals()
+        self.xp = Experience()

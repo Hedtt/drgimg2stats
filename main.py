@@ -124,8 +124,8 @@ def get_text_from_area(path_to_img, area, rmv_tmpl: bool = True):
         # cv2.waitKey(0)
         return text_w_rmv_tmpl, "Same"
     else:
-    #     cv2.imshow('asdf', crop_area)
-    #     cv2.waitKey(0)
+        #     cv2.imshow('asdf', crop_area)
+        #     cv2.waitKey(0)
         return text_w_rmv_tmpl, text_wo_rmv_tmpl, "Different"
 
 
@@ -133,17 +133,18 @@ def get_credits_area(path, game):
     text = get_text_from_area(path, credits_area)
     text = text[0].split('\n')
     text = list(filter(lambda a: a != '', text))
-    game.credits.all_credits = text[0].replace('¢','')
+    game.credits.all_credits = text[0].replace('¢', '')
     game.credits.primary_objective = text[2]
     game.credits.secondary_objective = text[4]
 
     regex_survial = re.compile('[01234]x Survival Bonus')
     game.credits.survial_bonus_quan = text[text.index(list(filter(regex_survial.match, text))[0])][0]
-    game.credits.survival_bonus = text[text.index(list(filter(regex_survial.match, text))[0])+1]
+    game.credits.survival_bonus = text[text.index(list(filter(regex_survial.match, text))[0]) + 1]
 
     regex_gold_mined = re.compile('\d+ x Gold mined')
-    game.credits.gold_mined_quan = text[text.index(list(filter(regex_gold_mined.match, text))[0])].replace(' x Gold mined','')
-    game.credits.gold_mined = text[text.index(list(filter(regex_gold_mined.match, text))[0])+1]
+    game.credits.gold_mined_quan = text[text.index(list(filter(regex_gold_mined.match, text))[0])].replace(
+        ' x Gold mined', '')
+    game.credits.gold_mined = text[text.index(list(filter(regex_gold_mined.match, text))[0]) + 1]
 
     regex_tyrant = re.compile('\d+ x Tyrant Shard')
     try:
@@ -162,15 +163,38 @@ def get_credits_area(path, game):
         pass
 
     if 'OMEN Modular Exterminator' in text:
-        game.credits.omen = text[text.index('OMEN Modular Exterminator')+1]
+        game.credits.omen = text[text.index('OMEN Modular Exterminator') + 1]
     if 'Ebonite Mutation' in text:
-        game.credits.ebonite_mutation = text[text.index('Ebonite Mutation')+1]
+        game.credits.ebonite_mutation = text[text.index('Ebonite Mutation') + 1]
     if 'Tritilyte Shard' in text:
-        game.credits.ebonite_mutation = text[text.index('Tritilyte Shard')+1]
+        game.credits.ebonite_mutation = text[text.index('Tritilyte Shard') + 1]
     if '1 x Data Cell' in text:
-        game.credits.data_cell = text[text.index('1 x Data Cell')+1]
+        game.credits.data_cell = text[text.index('1 x Data Cell') + 1]
     if 'Kursite Infection' in text:
-        game.credits.kursite_infection = text[text.index('Kursite Infection')+1]
+        game.credits.kursite_infection = text[text.index('Kursite Infection') + 1]
+
+
+def get_xp_area(path, game):
+    text = get_text_from_area(path, xp_area)
+    text = text[0].split('\n')
+    text = list(filter(lambda a: a != '', text))
+    # game.xp.all_xp = text[0].replace('¢', '')
+    game.xp.primary_objective = text[2]
+    game.xp.secondary_objective = text[4]
+
+    # probably don't need if
+    if 'Hostiles killed by team' in text:
+        game.xp.hostiles_killed = text[text.index('Hostiles killed by team') + 1]
+    if 'Minerals mined by team' in text:
+        game.xp.minerals = text[text.index('Minerals mined by team') + 1]
+    if '1 x Data Cell' in text:
+        game.xp.data_cell = text[text.index('1 x Data Cell') + 1]
+
+    regex_plagueheart = re.compile('\d+ x Tyrant Shard')
+    try:
+        game.xp.plagueheart = text[text.index(list(filter(regex_plagueheart.match, text))[0]) + 1]
+    except:
+        pass
 
 
 if __name__ == '__main__':
